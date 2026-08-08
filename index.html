@@ -34,7 +34,7 @@
 <body>
 <div id="root"></div>
 
-<script type="text/babel" data-presets="react">
+<script type="text/plain" id="app-source">
 const { useState, useEffect, useRef, useCallback } = React;
 const {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
@@ -1541,6 +1541,46 @@ function LoadingBlock() {
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<App />);
+</script>
+
+<script>
+  // Explicit Babel transform with classic JSX runtime — avoids "import" statements
+  // that newer Babel defaults can emit, which don't run in a plain <script> tag.
+  (function () {
+    function showFatalError(title, detail) {
+      document.getElementById("root").innerHTML =
+        '<div style="font-family:sans-serif;max-width:480px;margin:60px auto;padding:20px;' +
+        'background:#FBF7EE;border:1px solid #DFC49A;border-radius:10px;color:#241811;">' +
+        '<h2 style="margin-top:0;">Não deu pra carregar o Diapasão</h2>' +
+        '<p style="color:#7A3B2E;font-weight:600;">' + title + '</p>' +
+        '<pre style="white-space:pre-wrap;font-size:12px;color:#5A4A3A;background:#F1E9D8;' +
+        'padding:10px;border-radius:6px;">' + detail + '</pre>' +
+        '<p style="font-size:13px;color:#7A6A56;">Verifique a conexão com a internet (o app carrega ' +
+        'React/Recharts online) e tente recarregar a página.</p></div>';
+    }
+
+    window.addEventListener("error", function (e) {
+      if (document.getElementById("root").children.length === 0) {
+        showFatalError("Erro ao executar o app.", (e.error && e.error.stack) || e.message || String(e));
+      }
+    });
+
+    try {
+      if (typeof Babel === "undefined") throw new Error("Babel não carregou (CDN indisponível).");
+      if (typeof React === "undefined") throw new Error("React não carregou (CDN indisponível).");
+      if (typeof ReactDOM === "undefined") throw new Error("ReactDOM não carregou (CDN indisponível).");
+      if (typeof Recharts === "undefined") throw new Error("Recharts não carregou (CDN indisponível).");
+
+      var src = document.getElementById("app-source").textContent;
+      var output = Babel.transform(src, {
+        presets: [["react", { runtime: "classic" }]],
+      }).code;
+      (0, eval)(output);
+    } catch (err) {
+      showFatalError("Erro ao compilar/rodar o app.", (err && err.stack) || String(err));
+      console.error(err);
+    }
+  })();
 </script>
 </body>
 </html>
