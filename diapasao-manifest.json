@@ -1,0 +1,11 @@
+{
+  "name": "Diapasão",
+  "short_name": "Diapasão",
+  "start_url": "./diapasao.html",
+  "display": "standalone",
+  "background_color": "#241811",
+  "theme_color": "#241811",
+  "icons": [
+    { "src": "diapasao-icone.png", "sizes": "1024x1024", "type": "image/png" }
+  ]
+}
