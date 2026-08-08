@@ -581,14 +581,14 @@ function ListView({ instruments, onOpen }) {
       </header>
 
       <Section title="Em produção" count={producao.length} />
-      <div style={{ display: "grid", gap: 12, marginBottom: 32 }}>
+      <div style={{ display: "grid", gap: 14, marginBottom: 36 }}>
         {producao.map((inst) => (
           <InstrumentCard key={inst.id} inst={inst} onOpen={onOpen} />
         ))}
       </div>
 
       <Section title="Referência pessoal" count={referencia.length} />
-      <div style={{ display: "grid", gap: 12, marginBottom: 40 }}>
+      <div style={{ display: "grid", gap: 14, marginBottom: 40 }}>
         {referencia.map((inst) => (
           <InstrumentCard key={inst.id} inst={inst} onOpen={onOpen} />
         ))}
@@ -604,15 +604,15 @@ function BackupBar() {
   const [msg, setMsg] = useState("");
 
   return (
-    <div style={{ borderTop: "1px solid #DFC49A", paddingTop: 16, display: "flex", gap: 10, alignItems: "center" }}>
+    <div style={{ borderTop: "1px solid #DFC49A", paddingTop: 18, display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
       <button
         onClick={exportBackup}
         style={{
           display: "flex", alignItems: "center", gap: 6, background: "none", border: "1px solid #DFC49A",
-          borderRadius: 8, padding: "8px 12px", fontSize: 12.5, color: "#7A6A56",
+          borderRadius: 8, padding: "11px 14px", minHeight: 44, fontSize: 13, color: "#7A6A56",
         }}
       >
-        <Icon name="download" size={13} /> Exportar backup
+        <Icon name="download" size={14} /> Exportar backup
       </button>
       <input
         ref={fileInputRef}
@@ -632,10 +632,10 @@ function BackupBar() {
         onClick={() => fileInputRef.current?.click()}
         style={{
           display: "flex", alignItems: "center", gap: 6, background: "none", border: "1px solid #DFC49A",
-          borderRadius: 8, padding: "8px 12px", fontSize: 12.5, color: "#7A6A56",
+          borderRadius: 8, padding: "11px 14px", minHeight: 44, fontSize: 13, color: "#7A6A56",
         }}
       >
-        <Icon name="upload" size={13} /> Restaurar backup
+        <Icon name="upload" size={14} /> Restaurar backup
       </button>
       {msg && <span className="mono" style={{ fontSize: 11, color: "#B8874F" }}>{msg}</span>}
     </div>
@@ -644,8 +644,8 @@ function BackupBar() {
 
 function Section({ title, count }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "0 0 12px" }}>
-      <h2 className="serif" style={{ fontSize: 20, fontWeight: 600, margin: 0, color: "#241811" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "0 0 14px" }}>
+      <h2 className="serif" style={{ fontSize: 21, fontWeight: 600, margin: 0, color: "#241811" }}>
         {title}
       </h2>
       <span className="mono" style={{ fontSize: 11, color: "#9C8B6F" }}>
@@ -686,8 +686,8 @@ function InstrumentCard({ inst, onOpen }) {
         textAlign: "left",
         background: "#FBF7EE",
         border: "1px solid #DFC49A",
-        borderRadius: 10,
-        padding: 14,
+        borderRadius: 12,
+        padding: 16,
         width: "100%",
       }}
     >
@@ -756,12 +756,15 @@ function DetailView({ instrument, onBack }) {
           background: "none",
           border: "none",
           color: "#7A6A56",
-          fontSize: 14,
-          padding: "6px 0",
-          marginBottom: 16,
+          fontSize: 15,
+          fontWeight: 500,
+          padding: "12px 16px 12px 10px",
+          margin: "-12px 0 8px -10px",
+          minHeight: 44,
+          borderRadius: 8,
         }}
       >
-        <Icon name="chevronLeft" size={16} /> Instrumentos
+        <Icon name="chevronLeft" size={19} /> Instrumentos
       </button>
 
       <div style={{ marginBottom: 6 }}>
@@ -793,14 +796,15 @@ function TabButton({ active, onClick, icon, label }) {
       style={{
         display: "flex",
         alignItems: "center",
-        gap: 6,
-        padding: "8px 14px",
+        gap: 7,
+        padding: "13px 16px",
+        minHeight: 44,
         background: "none",
         border: "none",
         borderBottom: active ? "2px solid #B8874F" : "2px solid transparent",
         color: active ? "#241811" : "#9C8B6F",
         fontWeight: active ? 600 : 500,
-        fontSize: 14,
+        fontSize: 14.5,
         marginBottom: -1,
       }}
     >
@@ -828,7 +832,9 @@ function DestinoBlock({ instrumentId }) {
   const saveTimer = useRef(null);
 
   useEffect(() => {
-    loadKey(`destino:${instrumentId}`, { status: "Em produção", quemFicou: "", notas: "" }).then(setDestino);
+    loadKey(`destino:${instrumentId}`, { status: "Em produção", quemFicou: "", valorVenda: "", notas: "" }).then(
+      (d) => setDestino({ valorVenda: "", ...d })
+    );
   }, [instrumentId]);
 
   const update = (patch) => {
@@ -846,36 +852,38 @@ function DestinoBlock({ instrumentId }) {
 
   const inputStyle = {
     width: "100%",
-    padding: "9px 10px",
-    borderRadius: 7,
+    padding: "12px 13px",
+    borderRadius: 8,
     border: "1px solid #DFC49A",
     background: "#fff",
-    fontSize: 13.5,
+    fontSize: 15,
     color: "#241811",
   };
-  const labelStyle = { fontSize: 11.5, color: "#7A6A56", marginBottom: 4, display: "block" };
+  const labelStyle = { fontSize: 12.5, color: "#7A6A56", marginBottom: 6, display: "block" };
 
   return (
-    <div style={{ background: "#FBF7EE", border: "1px solid #DFC49A", borderRadius: 10, padding: 16, marginBottom: 14 }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-        <span style={{ fontSize: 12, color: "#7A6A56", fontWeight: 600, letterSpacing: "0.03em" }}>DESTINO</span>
-        {saved && <span className="mono" style={{ fontSize: 10, color: "#9C8B6F" }}>salvo</span>}
+    <div style={{ background: "#FBF7EE", border: "1px solid #DFC49A", borderRadius: 12, padding: 18, marginBottom: 16 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+        <span style={{ fontSize: 12.5, color: "#7A6A56", fontWeight: 600, letterSpacing: "0.04em" }}>DESTINO</span>
+        {saved && <span className="mono" style={{ fontSize: 10.5, color: "#9C8B6F" }}>salvo</span>}
       </div>
 
-      <div style={{ marginBottom: 12 }}>
+      <div style={{ marginBottom: 16 }}>
         <label style={labelStyle}>Status</label>
-        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {STATUS_OPTIONS.map((s) => (
             <button
               key={s}
               onClick={() => update({ status: s })}
               style={{
-                padding: "7px 12px",
-                borderRadius: 20,
+                padding: "11px 16px",
+                minHeight: 44,
+                borderRadius: 22,
                 border: `1px solid ${destino.status === s ? STATUS_COLORS[s] : "#DFC49A"}`,
                 background: destino.status === s ? STATUS_COLORS[s] : "#fff",
                 color: destino.status === s ? "#F1E9D8" : "#7A6A56",
-                fontSize: 12.5,
+                fontSize: 13.5,
+                fontWeight: destino.status === s ? 600 : 500,
               }}
             >
               {s}
@@ -885,7 +893,7 @@ function DestinoBlock({ instrumentId }) {
       </div>
 
       {(destino.status === "Vendido" || destino.status === "Reservado") && (
-        <div style={{ marginBottom: 12 }}>
+        <div style={{ marginBottom: 16 }}>
           <label style={labelStyle}>
             {destino.status === "Vendido" ? "Quem ficou com o instrumento" : "Reservado para"}
           </label>
@@ -895,6 +903,19 @@ function DestinoBlock({ instrumentId }) {
             value={destino.quemFicou}
             onChange={(e) => update({ quemFicou: e.target.value })}
             style={inputStyle}
+          />
+        </div>
+      )}
+
+      {destino.status === "Vendido" && (
+        <div style={{ marginBottom: 16 }}>
+          <label style={labelStyle}>Valor de venda (real, não o de tabela)</label>
+          <input
+            type="text"
+            placeholder="ex: R$ 74.000 ou US$ 14.500"
+            value={destino.valorVenda}
+            onChange={(e) => update({ valorVenda: e.target.value })}
+            style={{ ...inputStyle, fontFamily: FONT_MONO }}
           />
         </div>
       )}
@@ -917,7 +938,7 @@ function SpecsTab({ instrument }) {
   return (
     <div>
       <DestinoBlock instrumentId={instrument.id} />
-      <div style={{ background: "#FBF7EE", border: "1px solid #DFC49A", borderRadius: 10, overflow: "hidden" }}>
+      <div style={{ background: "#FBF7EE", border: "1px solid #DFC49A", borderRadius: 12, overflow: "hidden" }}>
         {instrument.specs.map(([label, value], i) => (
           <div
             key={label}
@@ -925,19 +946,19 @@ function SpecsTab({ instrument }) {
               display: "flex",
               justifyContent: "space-between",
               gap: 16,
-              padding: "12px 16px",
+              padding: "15px 18px",
               borderBottom: i < instrument.specs.length - 1 ? "1px solid #EADFC5" : "none",
             }}
           >
-            <span style={{ fontSize: 13, color: "#7A6A56", flexShrink: 0 }}>{label}</span>
-            <span className="mono" style={{ fontSize: 13, color: "#241811", textAlign: "right" }}>
+            <span style={{ fontSize: 13.5, color: "#7A6A56", flexShrink: 0, lineHeight: 1.5 }}>{label}</span>
+            <span className="mono" style={{ fontSize: 13.5, color: "#241811", textAlign: "right", lineHeight: 1.5 }}>
               {value}
             </span>
           </div>
         ))}
         {instrument.notes && (
-          <div style={{ padding: "14px 16px", background: "#F1E9D8", borderTop: "1px solid #DFC49A" }}>
-            <p style={{ margin: 0, fontSize: 13.5, color: "#5A4A3A", lineHeight: 1.5, fontStyle: "italic" }}>
+          <div style={{ padding: "16px 18px", background: "#F1E9D8", borderTop: "1px solid #DFC49A" }}>
+            <p style={{ margin: 0, fontSize: 14, color: "#5A4A3A", lineHeight: 1.6, fontStyle: "italic" }}>
               {instrument.notes}
             </p>
           </div>
@@ -1356,19 +1377,32 @@ function CertificatesSection({ instrumentId }) {
               <button
                 onClick={() => toggleFinal(c.id)}
                 title="Marcar como certificado final"
-                style={{ background: "none", border: "none", padding: 4, color: c.isFinal ? "#B8874F" : "#DFC49A" }}
+                style={{
+                  background: "none", border: "none", padding: 10, margin: "-6px",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  color: c.isFinal ? "#B8874F" : "#DFC49A",
+                }}
               >
-                <Icon name="star" size={16} fill={c.isFinal ? "#B8874F" : "none"} />
+                <Icon name="star" size={18} fill={c.isFinal ? "#B8874F" : "none"} />
               </button>
               <a
                 href={c.dataUrl}
                 download={c.fileName}
-                style={{ background: "none", border: "none", padding: 4, color: "#7A6A56", display: "flex" }}
+                style={{
+                  background: "none", border: "none", padding: 10, margin: "-6px",
+                  color: "#7A6A56", display: "flex", alignItems: "center", justifyContent: "center",
+                }}
               >
-                <Icon name="download" size={16} />
+                <Icon name="download" size={18} />
               </a>
-              <button onClick={() => removeCert(c.id)} style={{ background: "none", border: "none", padding: 4, color: "#B8a084" }}>
-                <Icon name="trash2" size={14} />
+              <button
+                onClick={() => removeCert(c.id)}
+                style={{
+                  background: "none", border: "none", padding: 10, margin: "-6px",
+                  display: "flex", alignItems: "center", justifyContent: "center", color: "#B8a084",
+                }}
+              >
+                <Icon name="trash2" size={16} />
               </button>
             </div>
           ))}
@@ -1385,33 +1419,39 @@ function FreqRow({ entry, onDelete }) {
       style={{
         display: "flex",
         alignItems: "center",
-        gap: 12,
+        gap: 14,
         background: "#FBF7EE",
         border: "1px solid #DFC49A",
-        borderRadius: 10,
-        padding: "12px 14px",
+        borderRadius: 12,
+        padding: "15px 16px",
       }}
     >
       <div style={{ width: 4, alignSelf: "stretch", background: color, borderRadius: 2 }} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-          <span style={{ fontSize: 13.5, fontWeight: 600, color: "#241811" }}>{entry.component}</span>
+          <span style={{ fontSize: 14, fontWeight: 600, color: "#241811" }}>{entry.component}</span>
           {entry.type === "alvo" && (
             <span className="mono" style={{ fontSize: 10, color: "#B8874F", border: "1px solid #B8874F", borderRadius: 4, padding: "1px 5px" }}>
               ALVO
             </span>
           )}
         </div>
-        {entry.notes && <div style={{ fontSize: 12.5, color: "#7A6A56", marginTop: 2 }}>{entry.notes}</div>}
-        <div className="mono" style={{ fontSize: 11, color: "#9C8B6F", marginTop: 3 }}>
+        {entry.notes && <div style={{ fontSize: 13, color: "#7A6A56", marginTop: 4, lineHeight: 1.4 }}>{entry.notes}</div>}
+        <div className="mono" style={{ fontSize: 11.5, color: "#9C8B6F", marginTop: 5 }}>
           {formatDate(entry.date)}
         </div>
       </div>
-      <div className="mono" style={{ fontSize: 18, fontWeight: 500, color: "#241811", whiteSpace: "nowrap" }}>
+      <div className="mono" style={{ fontSize: 19, fontWeight: 500, color: "#241811", whiteSpace: "nowrap" }}>
         {entry.freqHz}<span style={{ fontSize: 12, color: "#9C8B6F" }}>Hz</span>
       </div>
-      <button onClick={onDelete} style={{ background: "none", border: "none", color: "#B8a084", padding: 4 }}>
-        <Icon name="trash2" size={14} />
+      <button
+        onClick={onDelete}
+        style={{
+          background: "none", border: "none", color: "#B8a084", padding: 10, margin: "-6px -8px -6px 0",
+          display: "flex", alignItems: "center", justifyContent: "center",
+        }}
+      >
+        <Icon name="trash2" size={16} />
       </button>
     </div>
   );
@@ -1433,18 +1473,18 @@ function FreqForm({ onSubmit }) {
 
   const inputStyle = {
     width: "100%",
-    padding: "9px 10px",
-    borderRadius: 7,
+    padding: "12px 13px",
+    borderRadius: 8,
     border: "1px solid #DFC49A",
     background: "#fff",
-    fontSize: 13.5,
+    fontSize: 15,
     color: "#241811",
   };
-  const labelStyle = { fontSize: 11.5, color: "#7A6A56", marginBottom: 4, display: "block" };
+  const labelStyle = { fontSize: 12.5, color: "#7A6A56", marginBottom: 6, display: "block" };
 
   return (
-    <div style={{ background: "#FBF7EE", border: "1px solid #DFC49A", borderRadius: 10, padding: 16, marginBottom: 16, display: "grid", gap: 12 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+    <div style={{ background: "#FBF7EE", border: "1px solid #DFC49A", borderRadius: 12, padding: 18, marginBottom: 18, display: "grid", gap: 16 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
         <div>
           <label style={labelStyle}>Data</label>
           <input type="date" value={date} onChange={(e) => setDate(e.target.value)} style={inputStyle} />
@@ -1478,12 +1518,14 @@ function FreqForm({ onSubmit }) {
               onClick={() => setType(t)}
               style={{
                 flex: 1,
-                padding: "8px",
-                borderRadius: 7,
+                padding: "12px",
+                minHeight: 44,
+                borderRadius: 8,
                 border: `1px solid ${type === t ? "#241811" : "#DFC49A"}`,
                 background: type === t ? "#241811" : "#fff",
                 color: type === t ? "#F1E9D8" : "#7A6A56",
-                fontSize: 12.5,
+                fontSize: 13.5,
+                fontWeight: 500,
                 textTransform: "capitalize",
               }}
             >
@@ -1505,13 +1547,14 @@ function FreqForm({ onSubmit }) {
       <button
         onClick={submit}
         style={{
-          padding: "11px",
+          padding: "14px",
+          minHeight: 48,
           background: "#B8874F",
           color: "#241811",
           border: "none",
-          borderRadius: 8,
+          borderRadius: 9,
           fontWeight: 600,
-          fontSize: 13.5,
+          fontSize: 14.5,
         }}
       >
         Salvar medição
